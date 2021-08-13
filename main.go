@@ -1,23 +1,17 @@
 package main
 
 import (
-	"TodoApp/structs"
-	"encoding/json"
+	"TodoApp/controller"
+	"TodoApp/model"
+	"fmt"
+	"log"
 	"net/http"
 )
 
 func main() {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/ping", func(rw http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodGet {
-			data := structs.Response{
-				Code: http.StatusOK,
-				Body: "pong",
-			}
-			json.NewEncoder(rw).Encode(data)
-		}
-	})
-
-	http.ListenAndServe("localhost:3000", mux)
+	mux := controller.Register()
+	db := model.Connect()
+	defer db.Close()
+	fmt.Println("Server started")
+	log.Fatal(http.ListenAndServe("localhost:3000", mux))
 }
