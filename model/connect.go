@@ -10,10 +10,19 @@ import (
 
 var con *sql.DB
 
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "subpsql"
+	password = "pass12sub"
+	dbname   = "subpsql"
+)
+
 func Connect() *sql.DB {
-	db, err := sql.Open("postgres", "subpsql:pass12sub@(tcp:localhost:5432)")
+	psqlUri := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable password=%s", host, port, user, dbname, password)
+	db, err := sql.Open("postgres", psqlUri)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("connect error =", err)
 	}
 	fmt.Println("Connected to the database")
 	con = db
