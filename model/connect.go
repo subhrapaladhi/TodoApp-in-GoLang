@@ -25,6 +25,11 @@ func Connect() *sql.DB {
 		log.Fatal("connect error =", err)
 	}
 	fmt.Println("Connected to the database")
+	createTableQ, errCreate := db.Query("create table TODO(name varchar(50), todo varchar(1000))")
+	if errCreate != nil {
+		log.Fatal("table creation error = ", errCreate)
+	}
+	defer createTableQ.Close()
 	con = db
 	return db
 }
